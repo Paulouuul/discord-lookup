@@ -31,33 +31,33 @@ def format_user_output(user, show_colors=True):
         show_colors: Se deve usar cores no output
     """
     if show_colors:
-        print(f"{Fore.GREEN}✅ USUÁRIO ENCONTRADO!{Style.RESET_ALL}")
-        print(f"{Fore.CYAN}ID:{Style.RESET_ALL} {user.id}")
-        print(f"{Fore.CYAN}Username:{Style.RESET_ALL} {user.username}")
-        print(f"{Fore.CYAN}Discriminator:{Style.RESET_ALL} #{user.discriminator}")
-        print(f"{Fore.CYAN}Nome Completo:{Style.RESET_ALL} {user.username}#{user.discriminator}")
-        print(f"{Fore.CYAN}Avatar:{Style.RESET_ALL} {user.avatar_url}")
-        print(f"{Fore.CYAN}Bot:{Style.RESET_ALL} {'Sim' if user.is_bot else 'Não'}")
-        print(f"{Fore.CYAN}Data Criação:{Style.RESET_ALL} {user.created_at}")
-        print(f"{Fore.CYAN}Badges/Flags:{Style.RESET_ALL} {user.public_flags}")
-        print(f"{Fore.CYAN}Global Name:{Style.RESET_ALL} {user.global_name or 'N/A'}")
+        logger.info(f"{Fore.GREEN}✅ USUÁRIO ENCONTRADO!{Style.RESET_ALL}")
+        logger.info(f"{Fore.CYAN}ID:{Style.RESET_ALL} {user.id}")
+        logger.info(f"{Fore.CYAN}Username:{Style.RESET_ALL} {user.username}")
+        logger.info(f"{Fore.CYAN}Discriminator:{Style.RESET_ALL} #{user.discriminator}")
+        logger.info(f"{Fore.CYAN}Nome Completo:{Style.RESET_ALL} {user.username}#{user.discriminator}")
+        logger.info(f"{Fore.CYAN}Avatar:{Style.RESET_ALL} {user.avatar_url}")
+        logger.info(f"{Fore.CYAN}Bot:{Style.RESET_ALL} {'Sim' if user.is_bot else 'Não'}")
+        logger.info(f"{Fore.CYAN}Data Criação:{Style.RESET_ALL} {user.created_at}")
+        logger.info(f"{Fore.CYAN}Badges/Flags:{Style.RESET_ALL} {user.public_flags}")
+        logger.info(f"{Fore.CYAN}Global Name:{Style.RESET_ALL} {user.global_name or 'N/A'}")
         
         if user.banner:
-            print(f"{Fore.CYAN}Banner:{Style.RESET_ALL} {user.banner_url}")
+            logger.info(f"{Fore.CYAN}Banner:{Style.RESET_ALL} {user.banner_url}")
     else:
-        print(f"✅ USUÁRIO ENCONTRADO!")
-        print(f"ID: {user.id}")
-        print(f"Username: {user.username}")
-        print(f"Discriminator: #{user.discriminator}")
-        print(f"Nome Completo: {user.username}#{user.discriminator}")
-        print(f"Avatar: {user.avatar_url}")
-        print(f"Bot: {'Sim' if user.is_bot else 'Não'}")
-        print(f"Data Criação: {user.created_at}")
-        print(f"Badges/Flags: {user.public_flags}")
-        print(f"Global Name: {user.global_name or 'N/A'}")
+        logger.info(f"✅ USUÁRIO ENCONTRADO!")
+        logger.info(f"ID: {user.id}")
+        logger.info(f"Username: {user.username}")
+        logger.info(f"Discriminator: #{user.discriminator}")
+        logger.info(f"Nome Completo: {user.username}#{user.discriminator}")
+        logger.info(f"Avatar: {user.avatar_url}")
+        logger.info(f"Bot: {'Sim' if user.is_bot else 'Não'}")
+        logger.info(f"Data Criação: {user.created_at}")
+        logger.info(f"Badges/Flags: {user.public_flags}")
+        logger.info(f"Global Name: {user.global_name or 'N/A'}")
         
         if user.banner:
-            print(f"Banner: {user.banner_url}")
+            logger.info(f"Banner: {user.banner_url}")
 
 
 def main():
@@ -69,7 +69,7 @@ def main():
     # Obtém token
     token = os.getenv('DISCORD_BOT_TOKEN')
     if not token:
-        print("❌ Token não encontrado! Configure o arquivo .env com DISCORD_BOT_TOKEN")
+        logger.error("❌ Token não encontrado! Configure o arquivo .env com DISCORD_BOT_TOKEN")
         sys.exit(1)
     
     # Configura parser de argumentos
@@ -111,11 +111,11 @@ def main():
         format_user_output(user, show_colors=not args.no_color)
         
     except ValueError as e:
-        print(f"❌ Erro: {e}")
+        logger.error(f"❌ Erro: {e}")
         sys.exit(1)
     except Exception as e:
         logger.error(f"Erro inesperado: {e}")
-        print(f"❌ Erro: {e}")
+        logger.error(f"❌ Erro: {e}")
         sys.exit(1)
 
 
