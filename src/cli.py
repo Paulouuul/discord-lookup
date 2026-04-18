@@ -8,7 +8,7 @@ from dotenv import load_dotenv
 import os
 import logging
 from colorama import init, Fore, Style
-
+from src.formatters import JSONFormatter
 from src.client import DiscordClient
 
 # Inicializa colorama para cores no terminal
@@ -95,6 +95,19 @@ def main():
         help='Desativa cores no output'
     )
     
+    parser.add_argument(
+        '--output',
+        choices=['table', 'json'],
+        default='table',
+        help='Formato de saída (table ou json)'
+    )
+    
+    parser.add_argument(
+        '--save',
+        metavar='ARQUIVO',
+        help='Salvar resultado em arquivo (só funciona com --output json)'
+    )
+    
     args = parser.parse_args()
     
     # Configura nível de log
@@ -107,15 +120,25 @@ def main():
         client = DiscordClient(token)
         user = client.get_user(args.user_id)
         
-        # Exibe resultado
-        format_user_output(user, show_colors=not args.no_color)
+        # Salva em arquivo se especificado
+        if args.save:
+            if args.output == 'json':
+                JSONFormatter.save_to_file(user, args.save)
+                logger.info(f"✅ Resultado salvo em: {args.save}")
+            else:
+                logger.warning("--save só funciona com --output json")
+        
+        # Exibe no formato escolhido
+        if args.output == 'json':
+            print(JSONFormatter.format(user))
+        else:
+            format_user_output(user, show_colors=not args.no_color)
         
     except ValueError as e:
         logger.error(f"❌ Erro: {e}")
         sys.exit(1)
     except Exception as e:
         logger.error(f"Erro inesperado: {e}")
-        logger.error(f"❌ Erro: {e}")
         sys.exit(1)
 
 
