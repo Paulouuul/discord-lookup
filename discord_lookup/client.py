@@ -6,7 +6,8 @@ Gerencia requisições, autenticação e tratamento de erros
 import requests
 import time
 import logging
-from src.models import DiscordUser
+from tqdm import tqdm
+from discord_lookup.models import DiscordUser
 
 logger = logging.getLogger(__name__)
 
@@ -111,3 +112,41 @@ class DiscordClient:
             raise DiscordAPIError("Timeout na requisição - API do Discord demorou para responder")
         except requests.exceptions.ConnectionError:
             raise DiscordAPIError("Erro de conexão - verifique sua internet")
+    def get_users_batch(self, user_ids: list, show_progress: bool = True) -> list:
+        """
+        Busca múltiplos usuários em lote
+        
+        Args:
+            user_ids: Lista de IDs de usuários
+            show_progress: Se deve mostrar barra de progresso
+            
+        Returns:
+            list: Lista de dicionários com resultados (inclui erros)
+        """
+        results = []
+        iterator = tqdm(user_ids, desc="Buscando usuários") if show_progress else user_ids
+        
+        for user_id in iterator:
+            try:
+                user = self.get_user(user_id)
+                results.append({
+                    "user_id": user_id,
+                    "success": True,
+                    "data": {
+                        "id": user.id,
+                        "username": user.username,
+                        "discriminator": user.discriminator,
+                        "global_name": user.global_name,
+                        "avatar_url": user.avatar_url,
+                        "created_at": user.created_at,
+                        "is_bot": user.is_bot
+                    }
+                })
+            except Exception as e:
+                results.append({
+                    "user_id": user_id,
+                    "success": False,
+                    "error": str(e)
+                })
+        
+        return results

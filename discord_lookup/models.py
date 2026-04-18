@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 from typing import Optional
-from src.utils import snowflake_to_timestamp
+from discord_lookup.utils import snowflake_to_timestamp
 
 @dataclass
 class DiscordUser:

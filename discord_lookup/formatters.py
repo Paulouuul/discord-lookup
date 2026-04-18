@@ -57,3 +57,39 @@ class JSONFormatter:
         
         with open(filename, 'w', encoding='utf-8') as f:
             json.dump(data, f, indent=2, ensure_ascii=False)
+    @staticmethod
+    def format_batch(results: list) -> str:
+        """
+        Formata resultados de batch como JSON
+        
+        Args:
+            results: Lista de resultados do batch processing
+            
+        Returns:
+            str: JSON formatado com estatísticas e resultados
+        """
+        output = {
+            "total": len(results),
+            "success_count": sum(1 for r in results if r['success']),
+            "error_count": sum(1 for r in results if not r['success']),
+            "results": results
+        }
+        return json.dumps(output, indent=2, ensure_ascii=False)
+    
+    @staticmethod
+    def save_batch_to_file(results: list, filename: str) -> None:
+        """
+        Salva resultados de batch em arquivo JSON
+        
+        Args:
+            results: Lista de resultados do batch processing
+            filename: Nome do arquivo para salvar
+        """
+        output = {
+            "total": len(results),
+            "success_count": sum(1 for r in results if r['success']),
+            "error_count": sum(1 for r in results if not r['success']),
+            "results": results
+        }
+        with open(filename, 'w', encoding='utf-8') as f:
+            json.dump(output, f, indent=2, ensure_ascii=False)

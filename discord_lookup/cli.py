@@ -8,8 +8,8 @@ from dotenv import load_dotenv
 import os
 import logging
 from colorama import init, Fore, Style
-from src.formatters import JSONFormatter
-from src.client import DiscordClient
+from discord_lookup.formatters import JSONFormatter
+from discord_lookup.client import DiscordClient
 
 # Inicializa colorama para cores no terminal
 init(autoreset=True)
@@ -75,11 +75,12 @@ def main():
     # Configura parser de argumentos
     parser = argparse.ArgumentParser(
         description="Discord User Lookup Tool - Busca informações de usuários do Discord",
-        epilog="Exemplo: python -m src.cli 123456789012345678"
+        epilog="Exemplo: python -m discord_lookup.cli 123456789012345678"
     )
     
     parser.add_argument(
-        'user_id', 
+        'user_id',
+        nargs='?',
         help='ID do usuário do Discord (17-20 dígitos)'
     )
     
@@ -108,6 +109,17 @@ def main():
         help='Salvar resultado em arquivo (só funciona com --output json)'
     )
     
+    parser.add_argument(
+        '--batch',
+        metavar='ARQUIVO',
+        help='Arquivo com lista de IDs (um por linha) para processar em lote'
+    )
+
+    parser.add_argument(
+        '--no-progress',
+        action='store_true',
+        help='Desativa barra de progresso no batch mode'
+    )
     args = parser.parse_args()
     
     # Configura nível de log
@@ -116,24 +128,57 @@ def main():
         logger.debug("Modo verbose ativado")
     
     try:
-        # Cria cliente e busca usuário
         client = DiscordClient(token)
-        user = client.get_user(args.user_id)
         
-        # Salva em arquivo se especificado
-        if args.save:
+        # MODO BATCH
+        if args.batch:
+            # Ler IDs do arquivo
+            with open(args.batch, 'r', encoding='utf-8') as f:
+                user_ids = [line.strip() for line in f if line.strip()]
+            
+            if not user_ids:
+                logger.error("❌ Arquivo vazio ou sem IDs válidos")
+                sys.exit(1)
+            
+            logger.info(f"📋 Processando {len(user_ids)} usuários...")
+            
+            # Buscar em lote
+            results = client.get_users_batch(user_ids, show_progress=not args.no_progress)
+            
+            # Estatísticas
+            success_count = sum(1 for r in results if r['success'])
+            error_count = len(results) - success_count
+            
+            logger.info(f"✅ Sucessos: {success_count} | ❌ Erros: {error_count}")
+            
+            # Salvar resultados se solicitado
+            if args.save and args.output == 'json':
+                JSONFormatter.save_batch_to_file(results, args.save)
+                logger.info(f"✅ Resultados salvos em: {args.save}")
+            
+            # Exibir resultados
             if args.output == 'json':
+                print(JSONFormatter.format_batch(results))
+            else:
+                for result in results:
+                    if result['success']:
+                        print(f"\n✅ {result['user_id']}: {result['data']['username']}")
+                    else:
+                        print(f"\n❌ {result['user_id']}: {result['error']}")
+        
+        # MODO SINGLE USER (já existe)
+        else:
+            user = client.get_user(args.user_id)
+            
+            if args.save and args.output == 'json':
                 JSONFormatter.save_to_file(user, args.save)
                 logger.info(f"✅ Resultado salvo em: {args.save}")
+            
+            if args.output == 'json':
+                print(JSONFormatter.format(user))
             else:
-                logger.warning("--save só funciona com --output json")
-        
-        # Exibe no formato escolhido
-        if args.output == 'json':
-            print(JSONFormatter.format(user))
-        else:
-            format_user_output(user, show_colors=not args.no_color)
-        
+                format_user_output(user, show_colors=not args.no_color)
+            
     except ValueError as e:
         logger.error(f"❌ Erro: {e}")
         sys.exit(1)

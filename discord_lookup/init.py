@@ -10,9 +10,9 @@ __version__ = "1.0.0"
 __author__ = "Paulo Ricardo Tebet Lyrio"
 __license__ = "MIT"
 
-from src.client import DiscordClient
-from src.models import DiscordUser
-from src.utils import snowflake_to_timestamp
+from discord_lookup.client import DiscordClient
+from discord_lookup.models import DiscordUser
+from discord_lookup.utils import snowflake_to_timestamp
 
 __all__ = [
     "DiscordClient",
