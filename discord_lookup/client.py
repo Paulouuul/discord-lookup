@@ -1,3 +1,4 @@
+#client.py
 """
 Cliente para API do Discord
 Gerencia requisições, autenticação e tratamento de erros

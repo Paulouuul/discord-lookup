@@ -1,3 +1,4 @@
+#init.py
 """
 Discord User Lookup Tool - Ferramenta CLI para consulta de usuários do Discord
 

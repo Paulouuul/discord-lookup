@@ -1,3 +1,4 @@
+#cli.py
 """
 Interface de Linha de Comando para o Discord User Lookup
 """
@@ -8,7 +9,7 @@ from dotenv import load_dotenv
 import os
 import logging
 from colorama import init, Fore, Style
-from discord_lookup.formatters import JSONFormatter
+from discord_lookup.formatters import JSONFormatter, CSVFormatter
 from discord_lookup.client import DiscordClient
 
 # Inicializa colorama para cores no terminal
@@ -98,9 +99,9 @@ def main():
     
     parser.add_argument(
         '--output',
-        choices=['table', 'json'],
+        choices=['table', 'json', 'csv'],
         default='table',
-        help='Formato de saída (table ou json)'
+        help='Formato de saída (table, json ou csv)'
     )
     
     parser.add_argument(
@@ -133,7 +134,7 @@ def main():
         # MODO BATCH
         if args.batch:
             # Ler IDs do arquivo
-            with open(args.batch, 'r', encoding='utf-8') as f:
+            with open(args.batch, 'r', encoding='utf-8-sig') as f:
                 user_ids = [line.strip() for line in f if line.strip()]
             
             if not user_ids:
@@ -152,13 +153,21 @@ def main():
             logger.info(f"✅ Sucessos: {success_count} | ❌ Erros: {error_count}")
             
             # Salvar resultados se solicitado
-            if args.save and args.output == 'json':
-                JSONFormatter.save_batch_to_file(results, args.save)
-                logger.info(f"✅ Resultados salvos em: {args.save}")
+            if args.save:
+                if args.output == 'json':
+                    JSONFormatter.save_batch_to_file(results, args.save)
+                    logger.info(f"✅ Resultados salvos em: {args.save}")
+                elif args.output == 'csv':
+                    CSVFormatter.save_batch_to_file(results, args.save)
+                    logger.info(f"✅ Resultados salvos em: {args.save}")
+                else:
+                    logger.warning("--save só funciona com --output json ou --output csv")
             
             # Exibir resultados
             if args.output == 'json':
                 print(JSONFormatter.format_batch(results))
+            elif args.output == 'csv':
+                print(CSVFormatter.format_batch(results))
             else:
                 for result in results:
                     if result['success']:
@@ -170,12 +179,20 @@ def main():
         else:
             user = client.get_user(args.user_id)
             
-            if args.save and args.output == 'json':
-                JSONFormatter.save_to_file(user, args.save)
-                logger.info(f"✅ Resultado salvo em: {args.save}")
+            if args.save:
+                if args.output == 'json':
+                    JSONFormatter.save_to_file(user, args.save)
+                    logger.info(f"✅ Resultado salvo em: {args.save}")
+                elif args.output == 'csv':
+                    CSVFormatter.save_to_file(user, args.save)
+                    logger.info(f"✅ Resultado salvo em: {args.save}")
+                else:
+                    logger.warning("--save só funciona com --output json ou --output csv")
             
             if args.output == 'json':
                 print(JSONFormatter.format(user))
+            elif args.output == 'csv':
+                print(CSVFormatter.format(user))
             else:
                 format_user_output(user, show_colors=not args.no_color)
             
