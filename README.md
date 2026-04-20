@@ -140,7 +140,7 @@ id,username,discriminator,global_name,avatar_url,banner_url,is_bot,created_at,pu
 123456789012345678,exemplo_usuario,1234,Exemplo Nome,https://cdn.discordapp.com/avatars/123456789012345678/avatar_hash.png?size=512,,False,01/01/2021 12:00,131072
 ```
 
-### Batch Output(JSON)
+### Batch Output (JSON)
 
 ```json
 {
@@ -178,7 +178,7 @@ id,username,discriminator,global_name,avatar_url,banner_url,is_bot,created_at,pu
 }
 ```
 
-### Batch Output(CSV)
+### Batch Output (CSV)
 
 ```csv
 user_id,success,username,discriminator,global_name,avatar_url,banner_url,created_at,is_bot,error
