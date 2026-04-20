@@ -1,0 +1,25 @@
+# Dockerfile
+FROM python:3.11-slim
+
+# Define diretório de trabalho
+WORKDIR /app
+
+# Instala dependências do sistema (opcional, mas recomendado)
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    gcc \
+    && rm -rf /var/lib/apt/lists/*
+
+# Copia requirements primeiro (melhor aproveitamento de cache)
+COPY requirements.txt .
+
+# Instala dependências Python
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Copia o resto do código
+COPY . .
+
+# Define o ponto de entrada
+ENTRYPOINT ["python", "-m", "discord_lookup.cli"]
+
+# Comando padrão (mostra help se nenhum argumento for passado)
+CMD ["--help"]

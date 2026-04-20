@@ -1,0 +1,21 @@
+# .dockerignore
+venv/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.env
+.git/
+.gitignore
+*.log
+.pytest_cache/
+.coverage
+htmlcov/
+.vscode/
+.idea/
+*.md
+!.gitignore
+.DS_Store
+tests/
+*.bat
+*.ps1
