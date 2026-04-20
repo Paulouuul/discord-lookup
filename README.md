@@ -139,6 +139,9 @@ DISCORD_BOT_TOKEN=your_discord_bot_token_here
 
 ```
 discord-lookup/
+├── .github/
+│   └── workflows/
+│       └── ci.yml          # GitHub Actions CI/CD
 ├── discord_lookup/         # Main package
 │   ├── __init__.py
 │   ├── cli.py              # Command-line interface
@@ -152,14 +155,11 @@ discord-lookup/
 │   ├── test_formatters.py
 │   ├── test_models.py
 │   └── test_utils.py
-├── .github/
-│   └── workflows/
-│       └── ci.yml          # GitHub Actions CI/CD
-├── Dockerfile.cli          # Docker configuration
 ├── .dockerignore           # Docker ignore file
 ├── .gitignore              # Git ignore file
-├── requirements.txt        # Python dependencies
-└── README.md               # This file
+├── .Dockerfile.cli         # Docker configuration
+├── README.md               # This file
+└── requirements.txt        # Python dependencies
 ```
 
 ## Running Tests
