@@ -246,7 +246,7 @@ discord-lookup/
 │   └── test_utils.py
 ├── .dockerignore           # Docker ignore file
 ├── .gitignore              # Git ignore file
-├── .Dockerfile.cli         # Docker configuration
+├── Dockerfile.cli          # Docker configuration
 ├── README.md               # This file
 └── requirements.txt        # Python dependencies
 ```
