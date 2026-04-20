@@ -135,6 +135,7 @@ Follow these steps to obtain a Discord bot token:
 ```env
 DISCORD_BOT_TOKEN=your_discord_bot_token_here
 ```
+
 ## Project Structure
 
 ```
