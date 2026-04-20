@@ -98,6 +98,94 @@ python -m discord_lookup.cli USER_ID --verbose
 ```bash
 python -m discord_lookup.cli USER_ID --no-color
 ```
+
+## Output Examples
+
+### Table Format
+
+```
+2026-04-20 19:58:43,191 - INFO - Buscando usuário: 123456789012345678
+2026-04-20 19:58:43,515 - INFO - USUARIO ENCONTRADO!
+ID: 123456789012345678
+Username: exemplo_usuario
+Discriminator: #1234
+Nome Completo: exemplo_usuario#1234
+Avatar: https://cdn.discordapp.com/avatars/123456789012345678/avatar_hash.png?size=512
+Bot: Nao
+Data Criacao: 01/01/2021 12:00
+Badges/Flags: 131072
+Global Name: Exemplo Nome
+```
+
+### JSON Format
+
+```json
+{
+  "id": "123456789012345678",
+  "username": "exemplo_usuario",
+  "discriminator": "1234",
+  "global_name": "Exemplo Nome",
+  "avatar_url": "https://cdn.discordapp.com/avatars/123456789012345678/avatar_hash.png?size=512",
+  "banner_url": null,
+  "is_bot": false,
+  "created_at": "01/01/2021 12:00",
+  "public_flags": 131072
+}
+```
+
+### CSV Format
+
+```csv
+id,username,discriminator,global_name,avatar_url,banner_url,is_bot,created_at,public_flags
+123456789012345678,exemplo_usuario,1234,Exemplo Nome,https://cdn.discordapp.com/avatars/123456789012345678/avatar_hash.png?size=512,,False,01/01/2021 12:00,131072
+```
+
+### Batch Output(JSON)
+
+```json
+{
+  "total": 2,
+  "success_count": 2,
+  "error_count": 0,
+  "results": [
+    {
+      "user_id": "123456789012345678",
+      "success": true,
+      "data": {
+        "id": "123456789012345678",
+        "username": "usuario1",
+        "discriminator": "1234",
+        "global_name": "Nome Um",
+        "avatar_url": "https://cdn.discordapp.com/avatars/123456789012345678/avatar_hash.png?size=512",
+        "created_at": "01/01/2021 12:00",
+        "is_bot": false
+      }
+    },
+    {
+      "user_id": "876543210987654321",
+      "success": true,
+      "data": {
+        "id": "876543210987654321",
+        "username": "usuario2",
+        "discriminator": "5678",
+        "global_name": "Nome Dois",
+        "avatar_url": "https://cdn.discordapp.com/avatars/876543210987654321/avatar_hash.png?size=512",
+        "created_at": "15/03/2022 18:30",
+        "is_bot": false
+      }
+    }
+  ]
+}
+```
+
+### Batch Output(CSV)
+
+```csv
+user_id,success,username,discriminator,global_name,avatar_url,banner_url,created_at,is_bot,error
+123456789012345678,SUCCESS,usuario1,1234,Nome Um,https://cdn.discordapp.com/avatars/123456789012345678/avatar_hash.png?size=512,,01/01/2021 12:00,False,
+876543210987654321,SUCCESS,usuario2,5678,Nome Dois,https://cdn.discordapp.com/avatars/876543210987654321/avatar_hash.png?size=512,,15/03/2022 18:30,False,
+999999999999999999,ERROR,,,,,,,User not found
+```
 ## Help
 ```bash
 python -m discord_lookup.cli --help
