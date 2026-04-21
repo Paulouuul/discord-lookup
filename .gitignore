@@ -17,6 +17,8 @@ venv/
 .pytest_cache/
 .coverage
 htmlcov/
+*.bat
+*.txt
 
 # Logs
 *.log
@@ -29,6 +31,9 @@ dist/
 # Output files
 *.json
 *.csv
+*.html
+*.yaml
+
 
 # Docker
 *.tar.gz

@@ -9,7 +9,7 @@ from dotenv import load_dotenv
 import os
 import logging
 from colorama import init, Fore, Style
-from discord_lookup.formatters import JSONFormatter, CSVFormatter
+from discord_lookup.formatters import JSONFormatter, CSVFormatter, YAMLFormatter, HTMLFormatter
 from discord_lookup.client import DiscordClient
 
 # Inicializa colorama para cores no terminal
@@ -99,9 +99,9 @@ def main():
     
     parser.add_argument(
         '--output',
-        choices=['table', 'json', 'csv'],
+        choices=['table', 'json', 'csv', 'html', 'yaml'],
         default='table',
-        help='Formato de saída (table, json ou csv)'
+        help='Formato de saída (table, json, html ou yaml)'
     )
     
     parser.add_argument(
@@ -170,14 +170,24 @@ def main():
                 elif args.output == 'csv':
                     CSVFormatter.save_batch_to_file(results, args.save)
                     logger.info(f"✅ Resultados salvos em: {args.save}")
+                elif args.output == 'html':
+                    HTMLFormatter.save_batch_to_file(results, args.save)
+                    logger.info(f"✅ Resultados salvos em: {args.save}")
+                elif args.output == 'yaml':
+                    YAMLFormatter.save_batch_to_file(results, args.save)
+                    logger.info(f"✅ Resultados salvos em: {args.save}")
                 else:
-                    logger.warning("--save só funciona com --output json ou --output csv")
+                    logger.warning("--save só funciona com --output json, csv, html ou yaml")
             
             # Exibir resultados
             if args.output == 'json':
                 print(JSONFormatter.format_batch(results))
             elif args.output == 'csv':
                 print(CSVFormatter.format_batch(results))
+            elif args.output == 'html':
+                print(HTMLFormatter.format_batch(results))
+            elif args.output == 'yaml':
+                print(YAMLFormatter.format_batch(results))
             else:
                 for result in results:
                     if result['success']:
@@ -196,13 +206,22 @@ def main():
                 elif args.output == 'csv':
                     CSVFormatter.save_to_file(user, args.save)
                     logger.info(f"✅ Resultado salvo em: {args.save}")
+                elif args.output == 'html':
+                    HTMLFormatter.save_to_file(user, args.save)
+                    logger.info(f"✅ Resultado salvo em: {args.save}")
+                elif args.output == 'yaml':
+                    YAMLFormatter.save_to_file(user, args.save)
                 else:
-                    logger.warning("--save só funciona com --output json ou --output csv")
+                    logger.warning("--save só funciona com --output json, csv, html ou yaml")
             
             if args.output == 'json':
                 print(JSONFormatter.format(user))
             elif args.output == 'csv':
                 print(CSVFormatter.format(user))
+            elif args.output == 'html':
+                print(HTMLFormatter.format(user))
+            elif args.output == 'yaml':
+                print(YAMLFormatter.format(user))
             else:
                 format_user_output(user, show_colors=not args.no_color)
             
