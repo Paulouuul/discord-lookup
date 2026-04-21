@@ -3,6 +3,7 @@
 Formatadores de saída para diferentes formatos (JSON, CSV)
 """
 import csv
+import yaml
 from io import StringIO
 import json
 from typing import Dict, Any

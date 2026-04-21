@@ -134,9 +134,19 @@ def main():
         # MODO BATCH
         if args.batch:
             # Ler IDs do arquivo
-            with open(args.batch, 'r', encoding='utf-8-sig') as f:
-                user_ids = [line.strip() for line in f if line.strip()]
+            # Ler IDs do arquivo com múltiplos encodings
+            encodings = ['utf-8-sig', 'utf-8', 'utf-16', 'latin-1', 'cp1252']
+            user_ids = None
             
+            for encoding in encodings:
+                try:
+                    with open(args.batch, 'r', encoding=encoding) as f:
+                        user_ids = [line.strip() for line in f if line.strip()]
+                        if user_ids:
+                            logger.debug(f"Arquivo lido com encoding: {encoding}")
+                            break
+                except (UnicodeDecodeError, UnicodeError):
+                    continue
             if not user_ids:
                 logger.error("❌ Arquivo vazio ou sem IDs válidos")
                 sys.exit(1)
@@ -175,7 +185,7 @@ def main():
                     else:
                         print(f"\n❌ {result['user_id']}: {result['error']}")
         
-        # MODO SINGLE USER (já existe)
+        # MODO SINGLE USER
         else:
             user = client.get_user(args.user_id)
             
