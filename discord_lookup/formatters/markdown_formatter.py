@@ -73,9 +73,9 @@ class MarkdownFormatter(BaseFormatter):
         for result in results:
             if result['success']:
                 data = result['data']
-                rows += f"| {result['user_id']} | SUCCESS | {data['username']} | {data['discriminator']} | {data['global_name'] or ''} | {data['created_at']} |\n"
+                rows += f"| {result['user_id']} | SUCCESS | {data['username']} | {data['discriminator']} | {data['global_name'] or ''} | {data['avatar_url']} | {data.get('banner_url') or ''} | {data['created_at']} | {data['is_bot']} | {data.get('public_flags', 0)} |\n"
             else:
-                rows += f"| {result['user_id']} | ERROR | - | - | - | {result.get('error', 'Unknown')} |\n"
+                rows += f"| {result['user_id']} | ERROR | - | - | - | - | - | - | - | {result.get('error', 'Unknown')} |\n"
         
         return f"""# Discord Batch Results
 
@@ -89,8 +89,8 @@ class MarkdownFormatter(BaseFormatter):
 
 ## Resultados
 
-| User ID | Status | Username | Discriminator | Global Name | Created At |
-|---------|--------|----------|---------------|-------------|------------|
+| User ID | Status | Username | Discriminator | Global Name | Avatar URL | Banner URL | Created At | Is Bot | Public Flags |
+|---------|--------|----------|---------------|-------------|------------|------------|------------|-------|--------------|
 {rows}
 ---
 *Gerado por Discord Lookup Tool*

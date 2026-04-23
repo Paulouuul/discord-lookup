@@ -1,13 +1,13 @@
 [project]
 name = "discord-lookup"
-version = "1.1.0"
+version = "1.1.1"
 description = "CLI tool and Python library for Discord user lookup"
 readme = "README.md"
 license = "MIT"  # ← mudar de { text = "MIT" } para "MIT"
 authors = [
     { name = "Paulo Ricardo Tebet Lyrio", email = "tebetpaulo91@yahoo.com" }
 ]
-
+author = "Paulo Ricardo Tebet Lyrio"
 classifiers = [
     "Programming Language :: Python :: 3",
     "Programming Language :: Python :: 3.10",

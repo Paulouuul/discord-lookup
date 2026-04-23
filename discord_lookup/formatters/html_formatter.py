@@ -56,7 +56,7 @@ class HTMLFormatter(BaseFormatter):
         }}
         th, td {{
             padding: 12px;
-            text-align: left;
+            text-align: center;
             border-bottom: 1px solid #ddd;
         }}
         th {{
@@ -93,6 +93,11 @@ class HTMLFormatter(BaseFormatter):
             font-size: 12px;
             color: #666;
         }}
+        .banner {{
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;  /* ou 0 para sem borda */
+        }}
     </style>
 </head>
 <body>
@@ -111,7 +116,8 @@ class HTMLFormatter(BaseFormatter):
                     <th>Avatar</th>
                     <td><img src="{data['avatar_url']}" alt="Avatar" class="avatar"></td>
                 </tr>
-                <tr><th>Banner</th><td>{'<img src="' + data['banner_url'] + '" width="200">' if data['banner_url'] else 'No banner'}</td></tr>
+                <tr><th>Banner</th>
+                    <td>{f'<img src="{data["banner_url"]}" class="banner" width="400">' if data['banner_url'] else 'No banner'}</td></tr>
                 <tr><th>Bot</th><td><span class="badge {'badge-bot' if data['is_bot'] else 'badge-user'}">{'Yes' if data['is_bot'] else 'No'}</span></td></tr>
                 <tr><th>Created At</th><td>{data['created_at']}</td></tr>
                 <tr><th>Public Flags</th><td>{data['public_flags']}</td></tr>
@@ -155,6 +161,7 @@ class HTMLFormatter(BaseFormatter):
         for result in results:
             if result['success']:
                 data = result['data']
+                banner_html = f'<img src="{data["banner_url"]}" width="100" class="banner" loading="lazy">' if data.get('banner_url') else ''
                 rows += f"""
                 <tr style="background-color: #e8f5e9;">
                     <td>{result['user_id']}</td>
@@ -163,6 +170,7 @@ class HTMLFormatter(BaseFormatter):
                     <td>{data.get('discriminator', '')}</td>
                     <td>{data.get('global_name') or ''}</td>
                     <td><img src="{data.get('avatar_url', '')}" width="50" class="avatar"></td>
+                    <td>{banner_html}</td>
                     <td>{data.get('created_at', '')}</td>
                     <td>{'Yes' if data.get('is_bot') else 'No'}</td>
                     <td></td>
@@ -172,7 +180,7 @@ class HTMLFormatter(BaseFormatter):
                 <tr style="background-color: #ffebee;">
                     <td>{result['user_id']}</td>
                     <td><span class="badge badge-bot">ERROR</span></td>
-                    <td colspan="7">{result.get('error', 'Unknown error')}</td>
+                    <td colspan="9">{result.get('error', 'Unknown error')}</td>
                 </tr>"""
         
         return f"""<!DOCTYPE html>
@@ -290,6 +298,7 @@ class HTMLFormatter(BaseFormatter):
                         <th>Discriminator</th>
                         <th>Global Name</th>
                         <th>Avatar</th>
+                        <th>Banner URL</th>
                         <th>Created At</th>
                         <th>Bot</th>
                         <th>Error</th>

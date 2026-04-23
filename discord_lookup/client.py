@@ -139,8 +139,10 @@ class DiscordClient:
                         "discriminator": user.discriminator,
                         "global_name": user.global_name,
                         "avatar_url": user.avatar_url,
+                        "banner_url": user.banner_url,
                         "created_at": user.created_at,
-                        "is_bot": user.is_bot
+                        "is_bot": user.is_bot,
+                        "public_flags": user.public_flags
                     }
                 })
             except Exception as e:
