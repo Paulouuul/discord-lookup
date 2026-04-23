@@ -7,7 +7,6 @@ license = "MIT"  # ← mudar de { text = "MIT" } para "MIT"
 authors = [
     { name = "Paulo Ricardo Tebet Lyrio", email = "tebetpaulo91@yahoo.com" }
 ]
-author = "Paulo Ricardo Tebet Lyrio"
 classifiers = [
     "Programming Language :: Python :: 3",
     "Programming Language :: Python :: 3.10",
