@@ -7,6 +7,7 @@ license = "MIT"  # ← mudar de { text = "MIT" } para "MIT"
 authors = [
     { name = "Paulo Ricardo Tebet Lyrio", email = "tebetpaulo91@yahoo.com" }
 ]
+
 classifiers = [
     "Programming Language :: Python :: 3",
     "Programming Language :: Python :: 3.10",
@@ -36,3 +37,7 @@ Repository = "https://github.com/Paulouuul/discord-lookup"
 
 [project.scripts]
 discord-lookup = "discord_lookup.cli:main"
+
+[tool.setuptools.packages.find]
+include = ["discord_lookup*"]
+exclude = ["api*", "tests*"]
