@@ -9,3 +9,4 @@ pytest-mock>=3.11.0
 pyyaml>=6.0.0
 fastapi>=0.115.0
 uvicorn>=0.34.0
+dicttoxml>=1.7.0

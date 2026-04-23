@@ -8,19 +8,25 @@ import argparse
 from dotenv import load_dotenv
 import os
 import logging
+from logging.handlers import RotatingFileHandler
 from colorama import init, Fore, Style
-from discord_lookup.formatters import JSONFormatter, CSVFormatter, YAMLFormatter, HTMLFormatter
+from discord_lookup.formatters import JSONFormatter, CSVFormatter, YAMLFormatter, HTMLFormatter, XMLFormatter, MarkdownFormatter
 from discord_lookup.client import DiscordClient
+import re
 
+# Remove códigos de cor ANSI
+ansi_escape = re.compile(r'\x1B\[[0-?]*[ -/]*[@-~]')
+
+class FileFormatter(logging.Formatter):
+    """Formatador que remove códigos ANSI para arquivos de log"""
+    def format(self, record):
+        msg = super().format(record)
+        return ansi_escape.sub('', msg)
 # Inicializa colorama para cores no terminal
 init(autoreset=True)
-
-# Configura logging básico
-logging.basicConfig(
-    level=logging.INFO,
-    format='%(asctime)s - %(levelname)s - %(message)s'
-)
+# Inicializa logger
 logger = logging.getLogger(__name__)
+
 
 
 def format_user_output(user, show_colors=True):
@@ -32,7 +38,7 @@ def format_user_output(user, show_colors=True):
         show_colors: Se deve usar cores no output
     """
     if show_colors:
-        logger.info(f"{Fore.GREEN}✅ USUÁRIO ENCONTRADO!{Style.RESET_ALL}")
+        logger.info(f"{Fore.GREEN}USUÁRIO ENCONTRADO!{Style.RESET_ALL}")
         logger.info(f"{Fore.CYAN}ID:{Style.RESET_ALL} {user.id}")
         logger.info(f"{Fore.CYAN}Username:{Style.RESET_ALL} {user.username}")
         logger.info(f"{Fore.CYAN}Discriminator:{Style.RESET_ALL} #{user.discriminator}")
@@ -46,7 +52,7 @@ def format_user_output(user, show_colors=True):
         if user.banner:
             logger.info(f"{Fore.CYAN}Banner:{Style.RESET_ALL} {user.banner_url}")
     else:
-        logger.info(f"✅ USUÁRIO ENCONTRADO!")
+        logger.info(f"USUÁRIO ENCONTRADO!")
         logger.info(f"ID: {user.id}")
         logger.info(f"Username: {user.username}")
         logger.info(f"Discriminator: #{user.discriminator}")
@@ -66,12 +72,7 @@ def main():
     
     # Carrega variáveis de ambiente
     load_dotenv()
-    
-    # Obtém token
-    token = os.getenv('DISCORD_BOT_TOKEN')
-    if not token:
-        logger.error("❌ Token não encontrado! Configure o arquivo .env com DISCORD_BOT_TOKEN")
-        sys.exit(1)
+
     
     # Configura parser de argumentos
     parser = argparse.ArgumentParser(
@@ -99,15 +100,15 @@ def main():
     
     parser.add_argument(
         '--output',
-        choices=['table', 'json', 'csv', 'html', 'yaml'],
+        choices=['table', 'json', 'csv', 'html', 'xml', 'md', 'yaml'],
         default='table',
-        help='Formato de saída (table, json, html ou yaml)'
+        help='Formato de saída (table, json, csv, html, xml, md, yaml)'
     )
     
     parser.add_argument(
         '--save',
         metavar='ARQUIVO',
-        help='Salvar resultado em arquivo (só funciona com --output json)'
+        help='Salvar resultado em arquivo (só funciona com json, csv, html, xml, md, yaml)'
     )
     
     parser.add_argument(
@@ -121,7 +122,51 @@ def main():
         action='store_true',
         help='Desativa barra de progresso no batch mode'
     )
+
+    parser.add_argument(
+    '--log-file',
+    metavar='ARQUIVO',
+    help='Salvar logs em arquivo (ex: --log-file discord.log)'
+)
+
+    parser.add_argument(
+        '--log-level',
+        choices=['DEBUG', 'INFO', 'WARNING', 'ERROR'],
+        default='INFO',
+        help='Nível de log (DEBUG, INFO, WARNING, ERROR)'
+    )
     args = parser.parse_args()
+
+     # ========== CONFIGURAÇÃO DE LOGGING ==========
+    log_level = getattr(logging, args.log_level)
+
+    handlers = []
+
+    # Console handler (com cores)
+    console_handler = logging.StreamHandler()
+    console_handler.setFormatter(logging.Formatter('%(asctime)s - %(levelname)s - %(message)s'))
+    handlers.append(console_handler)
+
+    # File handler (sem cores - se solicitado)
+    if args.log_file:
+        file_handler = RotatingFileHandler(
+            args.log_file,
+            maxBytes=10485760,  # 10MB
+            backupCount=5,
+            encoding='utf-8'
+        )
+        file_handler.setFormatter(FileFormatter('%(asctime)s - %(levelname)s - %(message)s'))
+        handlers.append(file_handler)
+
+    # Configurar logging
+    logging.basicConfig(level=log_level, handlers=handlers)
+    # =============================================
+
+    # Obtém token
+    token = os.getenv('DISCORD_BOT_TOKEN')
+    if not token:
+        logger.error("Token não encontrado! Configure o arquivo .env com DISCORD_BOT_TOKEN")
+        sys.exit(1)
     
     # Configura nível de log
     if args.verbose:
@@ -148,10 +193,10 @@ def main():
                 except (UnicodeDecodeError, UnicodeError):
                     continue
             if not user_ids:
-                logger.error("❌ Arquivo vazio ou sem IDs válidos")
+                logger.error("Arquivo vazio ou sem IDs válidos")
                 sys.exit(1)
             
-            logger.info(f"📋 Processando {len(user_ids)} usuários...")
+            logger.info(f"Processando {len(user_ids)} usuários...")
             
             # Buscar em lote
             results = client.get_users_batch(user_ids, show_progress=not args.no_progress)
@@ -160,24 +205,30 @@ def main():
             success_count = sum(1 for r in results if r['success'])
             error_count = len(results) - success_count
             
-            logger.info(f"✅ Sucessos: {success_count} | ❌ Erros: {error_count}")
+            logger.info(f"Sucessos: {success_count} | Erros: {error_count}")
             
             # Salvar resultados se solicitado
             if args.save:
                 if args.output == 'json':
                     JSONFormatter.save_batch_to_file(results, args.save)
-                    logger.info(f"✅ Resultados salvos em: {args.save}")
+                    logger.info(f"Resultados salvos em: {args.save}")
                 elif args.output == 'csv':
                     CSVFormatter.save_batch_to_file(results, args.save)
-                    logger.info(f"✅ Resultados salvos em: {args.save}")
+                    logger.info(f"Resultados salvos em: {args.save}")
                 elif args.output == 'html':
                     HTMLFormatter.save_batch_to_file(results, args.save)
-                    logger.info(f"✅ Resultados salvos em: {args.save}")
+                    logger.info(f"Resultados salvos em: {args.save}")
+                elif args.output == 'xml':
+                    XMLFormatter.save_batch_to_file(results, args.save)
+                    logger.info(f"Resultados salvos em: {args.save}")
+                elif args.output == 'md':
+                    MarkdownFormatter.save_batch_to_file(results, args.save)
+                    logger.info(f"Resultados salvos em: {args.save}")
                 elif args.output == 'yaml':
                     YAMLFormatter.save_batch_to_file(results, args.save)
-                    logger.info(f"✅ Resultados salvos em: {args.save}")
+                    logger.info(f"Resultados salvos em: {args.save}")
                 else:
-                    logger.warning("--save só funciona com --output json, csv, html ou yaml")
+                    logger.warning("--save só funciona com --output json, csv, html, xml ou yaml")
             
             # Exibir resultados
             if args.output == 'json':
@@ -186,14 +237,18 @@ def main():
                 print(CSVFormatter.format_batch(results))
             elif args.output == 'html':
                 print(HTMLFormatter.format_batch(results))
+            elif args.output == 'xml':
+                print(XMLFormatter.format_batch(results))
+            elif args.output == 'md':
+                print(MarkdownFormatter.format_batch(results))
             elif args.output == 'yaml':
                 print(YAMLFormatter.format_batch(results))
             else:
                 for result in results:
                     if result['success']:
-                        print(f"\n✅ {result['user_id']}: {result['data']['username']}")
+                        print(f"\n{result['user_id']}: {result['data']['username']}")
                     else:
-                        print(f"\n❌ {result['user_id']}: {result['error']}")
+                        print(f"\n{result['user_id']}: {result['error']}")
         
         # MODO SINGLE USER
         else:
@@ -202,17 +257,23 @@ def main():
             if args.save:
                 if args.output == 'json':
                     JSONFormatter.save_to_file(user, args.save)
-                    logger.info(f"✅ Resultado salvo em: {args.save}")
+                    logger.info(f"Resultado salvo em: {args.save}")
                 elif args.output == 'csv':
                     CSVFormatter.save_to_file(user, args.save)
-                    logger.info(f"✅ Resultado salvo em: {args.save}")
+                    logger.info(f"Resultado salvo em: {args.save}")
                 elif args.output == 'html':
                     HTMLFormatter.save_to_file(user, args.save)
-                    logger.info(f"✅ Resultado salvo em: {args.save}")
+                    logger.info(f"Resultado salvo em: {args.save}")
+                elif args.output == 'xml':
+                    XMLFormatter.save_to_file(user, args.save)
+                    logger.info(f"Resultado salvo em: {args.save}")
+                elif args.output == 'md':
+                    MarkdownFormatter.save_to_file(user, args.save)
+                    logger.info(f"Resultado salvo em: {args.save}")
                 elif args.output == 'yaml':
                     YAMLFormatter.save_to_file(user, args.save)
                 else:
-                    logger.warning("--save só funciona com --output json, csv, html ou yaml")
+                    logger.warning("--save só funciona com --output json, csv, html, xml ou yaml")
             
             if args.output == 'json':
                 print(JSONFormatter.format(user))
@@ -220,13 +281,17 @@ def main():
                 print(CSVFormatter.format(user))
             elif args.output == 'html':
                 print(HTMLFormatter.format(user))
+            elif args.output == 'xml':
+                print(XMLFormatter.format(user))
+            elif args.output == 'md':
+                print(MarkdownFormatter.format(user))
             elif args.output == 'yaml':
                 print(YAMLFormatter.format(user))
             else:
                 format_user_output(user, show_colors=not args.no_color)
             
     except ValueError as e:
-        logger.error(f"❌ Erro: {e}")
+        logger.error(f"Erro: {e}")
         sys.exit(1)
     except Exception as e:
         logger.error(f"Erro inesperado: {e}")

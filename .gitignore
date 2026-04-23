@@ -33,6 +33,10 @@ dist/
 *.csv
 *.html
 *.yaml
+*.xml
+*.md
+!README.md
+
 
 
 # Docker

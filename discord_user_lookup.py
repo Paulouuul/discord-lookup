@@ -45,13 +45,13 @@ def lookup_user(user_id):
 
     except requests.exceptions.HTTPError as e:
         if response.status_code == 404:
-            print("❌ Usuário não encontrado ou ID inválido.")
+            print("Usuário não encontrado ou ID inválido.")
         elif response.status_code == 401:
-            print("❌ Token inválido. Verifique DISCORD_TOKEN.")
+            print("Token inválido. Verifique DISCORD_TOKEN.")
         else:
-            print(f"❌ Erro HTTP {response.status_code}: {response.text}")
+            print(f"Erro HTTP {response.status_code}: {response.text}")
     except Exception as e:
-        print(f"❌ Erro: {str(e)}")
+        print(f"Erro: {str(e)}")
 
 if __name__ == "__main__":
     if len(sys.argv) != 2:
