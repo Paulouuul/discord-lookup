@@ -52,16 +52,17 @@ class HTMLFormatter(BaseFormatter):
         }}
         table {{
             width: 100%;
+            table-layout: fixed;
             border-collapse: collapse;
         }}
         th, td {{
             padding: 12px;
-            text-align: center;
+            text-align: left;
             border-bottom: 1px solid #ddd;
+            white-space: nowrap;
         }}
         th {{
             background-color: #f2f2f2;
-            width: 30%;
         }}
         .avatar {{
             border-radius: 50%;
@@ -172,6 +173,7 @@ class HTMLFormatter(BaseFormatter):
                     <td><img src="{data.get('avatar_url', '')}" width="50" class="avatar"></td>
                     <td>{banner_html}</td>
                     <td>{data.get('created_at', '')}</td>
+                    <td style="text-align: center;">{data.get('public_flags', 0)}</td>
                     <td>{'Yes' if data.get('is_bot') else 'No'}</td>
                     <td></td>
                 </tr>"""
@@ -180,7 +182,7 @@ class HTMLFormatter(BaseFormatter):
                 <tr style="background-color: #ffebee;">
                     <td>{result['user_id']}</td>
                     <td><span class="badge badge-bot">ERROR</span></td>
-                    <td colspan="9">{result.get('error', 'Unknown error')}</td>
+                    <td colspan="10">{result.get('error', 'Unknown error')}</td>
                 </tr>"""
         
         return f"""<!DOCTYPE html>
@@ -196,7 +198,7 @@ class HTMLFormatter(BaseFormatter):
             background-color: #f5f5f5;
         }}
         .container {{
-            max-width: 1200px;
+            max-width: 1400px;
             margin: 0 auto;
             background-color: white;
             border-radius: 10px;
@@ -237,6 +239,7 @@ class HTMLFormatter(BaseFormatter):
             padding: 12px;
             text-align: left;
             border-bottom: 1px solid #ddd;
+            white-space: nowrap;
         }}
         th {{
             background-color: #5865F2;
@@ -300,6 +303,7 @@ class HTMLFormatter(BaseFormatter):
                         <th>Avatar</th>
                         <th>Banner URL</th>
                         <th>Created At</th>
+                        <th>Public Flags</th>
                         <th>Bot</th>
                         <th>Error</th>
                     </tr>
