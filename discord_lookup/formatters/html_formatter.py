@@ -182,7 +182,7 @@ class HTMLFormatter(BaseFormatter):
                 <tr style="background-color: #ffebee;">
                     <td>{result['user_id']}</td>
                     <td><span class="badge badge-bot">ERROR</span></td>
-                    <td colspan="10">{result.get('error', 'Unknown error')}</td>
+                    <td colspan="11">{result.get('error', 'Unknown error')}</td>
                 </tr>"""
         
         return f"""<!DOCTYPE html>
