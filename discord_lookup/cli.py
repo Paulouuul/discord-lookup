@@ -29,6 +29,8 @@ logger = logging.getLogger(__name__)
 
 
 
+
+
 def format_user_output(user, show_colors=True):
     """
     Formata a saída do usuário para exibição no terminal
@@ -160,6 +162,8 @@ def main():
 
     # Configurar logging
     logging.basicConfig(level=log_level, handlers=handlers)
+    # Silenciar bibliotecas externas
+    logging.getLogger("dicttoxml").setLevel(logging.WARNING)
     # =============================================
 
     # Obtém token
