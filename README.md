@@ -13,7 +13,7 @@ Discord Lookup Tool is a command-line interface (CLI) application and Python lib
 
 - **User lookup by ID** - Get complete user information from Discord
 - **Batch processing** - Process multiple user IDs from a file with progress bar
-- **Multiple output formats** - Table (colorful), JSON, and CSV
+- **Multiple output formats** - - Table (colorful), JSON, CSV, YAML, HTML, XML, Markdown
 - **Professional logging** - DEBUG, INFO, WARNING, ERROR levels with --verbose flag
 - **Error handling** - Comprehensive error handling for API errors, rate limiting, and network issues
 - **Docker support** - Containerized application for easy deployment
@@ -28,6 +28,8 @@ Discord Lookup Tool is a command-line interface (CLI) application and Python lib
 - Pytest for unit testing
 - Docker for containerization
 - GitHub Actions for CI/CD
+- FastAPI for REST API
+- Redis for caching
 
 ## Installation
 
@@ -55,16 +57,28 @@ echo DISCORD_BOT_TOKEN=your_token_here > .env
 ```
 
 ## Docker Installation
-### Build the image
+
+### Build the CLI image
 ```bash
 docker build -f Dockerfile.cli -t discord-lookup-cli .
 ```
+
+### Build the API image
+```bash
+docker build -f Dockerfile.api -t discord-lookup-api
+```
+
+### Run the API with Docker Compose
+```bash
+docker-compose -f docker-compose.api.yml up -d
+```
+
 ### Run with volume for .env access
 ```bash
 docker run --rm -v "$(pwd):/app" discord-lookup-cli USER_ID
 ```
 
-## Usage
+## CLI Usage
 
 ### Basic user lookup (table format)
 ```bash
@@ -97,6 +111,63 @@ python -m discord_lookup.cli USER_ID --verbose
 ### Disable colors
 ```bash
 python -m discord_lookup.cli USER_ID --no-color
+```
+
+## API Usage
+
+### Start the API server
+
+```bash
+uvicorn api.main:app --reload --port 8000
+```
+
+### API Endpoints
+
+| Method | Endpoint | Description | Formats |
+|--------|----------|-------------|---------|
+| GET | `/users/{id}` | Get user information | JSON, CSV, YAML, HTML, XML, Markdown |
+| POST | `/users/batch` | Get multiple users | JSON, CSV, YAML, HTML, XML, Markdown |
+| GET | `/health` | Health check | JSON |
+| GET | `/docs` | Swagger documentation | HTML |
+
+### API Examples
+
+```bash
+# JSON (default)
+curl http://localhost:8000/users/561973026711797792
+
+# CSV
+curl -H "Accept: text/csv" http://localhost:8000/users/561973026711797792
+
+# YAML
+curl -H "Accept: application/x-yaml" http://localhost:8000/users/561973026711797792
+
+# HTML
+curl -H "Accept: text/html" http://localhost:8000/users/561973026711797792
+
+# XML
+curl -H "Accept: application/xml" http://localhost:8000/users/561973026711797792
+
+# Markdown
+curl -H "Accept: text/markdown" http://localhost:8000/users/561973026711797792
+
+# Batch request
+curl -X POST http://localhost:8000/users/batch \
+  -H "Content-Type: application/json" \
+  -d '{"user_ids": ["561973026711797792", "563529796768759840"]}'
+```
+### Redis Cache
+
+The API uses Redis for caching with 1-hour TTL to improve performance.
+
+**Clear cache:**
+```bash
+docker exec discord-lookup-redis-1 redis-cli FLUSHALL
+```
+
+**Check cache status:**
+```bash
+docker exec discord-lookup-redis-1 redis-cli DBSIZE
 ```
 
 ## Output Examples
@@ -230,25 +301,64 @@ DISCORD_BOT_TOKEN=your_discord_bot_token_here
 discord-lookup/
 ├── .github/
 │   └── workflows/
-│       └── ci.yml          # GitHub Actions CI/CD
-├── discord_lookup/         # Main package
+│       └── ci.yml                     # GitHub Actions CI/CD pipeline (58 tests, Docker builds)
+├── api/                               # FastAPI REST API module
 │   ├── __init__.py
-│   ├── cli.py              # Command-line interface
-│   ├── client.py           # Discord API client
-│   ├── formatters.py       # JSON and CSV formatters
-│   ├── models.py           # Data models
-│   └── utils.py            # Utility functions
-├── tests/                  # Unit tests
+│   ├── config.py                      # API configuration (Redis, CORS, rate limiting)
+│   ├── main.py                        # FastAPI application entry point
+│   ├── router.py                      # API route definitions (/users, /health)
+│   ├── cache/
+│   │   ├── __init__.py
+│   │   └── redis_cache.py             # Redis client with TTL and connection pooling
+│   ├── dependencies/
+│   │   ├── __init__.py
+│   │   ├── cache.py                   # Dependency injection for Redis cache
+│   │   └── discord_client.py          # Dependency injection for Discord client
+│   ├── models/
+│   │   ├── __init.py__
+│   │   └── schemas.py                 # Pydantic models (UserResponse, BatchResponse, etc.)
+│   ├── use_cases/
+│   │   ├── __init__.py
+│   │   └── users/
+│   │       ├── __init__.py
+│   │       ├── get_user.py            # Single user business logic with cache
+│   │       └── get_users_batch.py     # Batch users business logic with cache
+│   └── utils/
+│       ├── __init__.py
+│       └── exporters.py               # Exporters for JSON, CSV, YAML, HTML, XML, Markdown
+├── discord_lookup/                    # Main CLI package
 │   ├── __init__.py
-│   ├── test_client.py
-│   ├── test_formatters.py
-│   ├── test_models.py
-│   └── test_utils.py
-├── .dockerignore           # Docker ignore file
-├── .gitignore              # Git ignore file
-├── Dockerfile.cli          # Docker configuration
-├── README.md               # This file
-└── requirements.txt        # Python dependencies
+│   ├── cli.py                         # CLI entry point with argparse (7 output formats)
+│   ├── client.py                      # Discord API client (rate limiting, error handling)
+│   ├── models.py                      # DiscordUser dataclass (9 fields + properties)
+│   ├── utils.py                       # Utilities (snowflake to timestamp conversion)
+│   └── formatters/                    # Modular output formatters
+│       ├── __init__.py
+│       ├── base.py                    # BaseFormatter abstract class
+│       ├── json_formatter.py          # JSON output (single + batch)
+│       ├── csv_formatter.py           # CSV output (single + batch)
+│       ├── yaml_formatter.py          # YAML output (single + batch)
+│       ├── html_formatter.py          # HTML output with table and images
+│       ├── xml_formatter.py           # XML output using dicttoxml
+│       └── markdown_formatter.py      # Markdown output with table (11 columns)
+├── tests/                             # Unit tests (58 tests)
+│   ├── __init__.py
+│   ├── test_api.py                    # API endpoint tests
+│   ├── test_cache.py                  # Redis cache tests
+│   ├── test_client.py                 # DiscordClient tests
+│   ├── test_csv_formatter.py          # CSVFormatter tests
+│   ├── test_html_formatter.py         # HTMLFormatter tests
+│   ├── test_json_formatter.py         # JSONFormatter tests
+│   ├── test_markdown_formatter.py     # MarkdownFormatter tests
+│   ├── test_models.py                 # DiscordUser model tests
+│   ├── test_utils.py                  # Utils tests
+│   ├── test_xml_formatter.py          # XMLFormatter tests
+│   └── test_yaml_formatter.py         # YAMLFormatter tests
+├── Dockerfile.cli                     # Docker image for CLI (python:3.11-slim)
+├── Dockerfile.api                     # Docker image for API (python:3.11-slim + uvicorn)
+├── docker-compose.api.yml             # Docker Compose (API + Redis services)
+├── requirements.txt                   # Python dependencies
+└── README.md                          # Project documentation
 ```
 
 ## Running Tests
