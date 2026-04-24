@@ -103,12 +103,15 @@ class DiscordClient:
             )
             
         except requests.exceptions.HTTPError as e:
-            if response.status_code == 404:
-                raise ValueError(f"Usuário {user_id} não encontrado")
-            elif response.status_code == 401:
-                raise ValueError("Token inválido. Verifique seu DISCORD_BOT_TOKEN")
+            if e.response is not None:
+                if e.response.status_code == 404:
+                    raise ValueError(f"Usuário {user_id} não encontrado")
+                elif e.response.status_code == 401:
+                    raise ValueError("Token inválido. Verifique seu DISCORD_BOT_TOKEN")
+                else:
+                    raise DiscordAPIError(f"Erro HTTP {e.response.status_code}: {e.response.text}")
             else:
-                raise DiscordAPIError(f"Erro HTTP {response.status_code}: {response.text}")
+                raise DiscordAPIError(f"Erro HTTP: {str(e)}")
         except requests.exceptions.Timeout:
             raise DiscordAPIError("Timeout na requisição - API do Discord demorou para responder")
         except requests.exceptions.ConnectionError:

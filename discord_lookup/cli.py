@@ -11,7 +11,7 @@ import logging
 from logging.handlers import RotatingFileHandler
 from colorama import init, Fore, Style
 from discord_lookup.formatters import JSONFormatter, CSVFormatter, YAMLFormatter, HTMLFormatter, XMLFormatter, MarkdownFormatter
-from discord_lookup.client import DiscordClient
+from discord_lookup.client import DiscordClient, DiscordAPIError
 import re
 
 # Remove códigos de cor ANSI
@@ -297,9 +297,12 @@ def main():
     except ValueError as e:
         logger.error(f"Erro: {e}")
         sys.exit(1)
+    except DiscordAPIError as e:
+        logger.error(f"Erro de comunicação: {e}")
+        sys.exit(2)
     except Exception as e:
         logger.error(f"Erro inesperado: {e}")
-        sys.exit(1)
+        sys.exit(3)
 
 
 if __name__ == "__main__":
