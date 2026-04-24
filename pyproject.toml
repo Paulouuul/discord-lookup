@@ -1,6 +1,6 @@
 [project]
 name = "discord-lookup"
-version = "1.1.6"
+version = "1.1.7"
 description = "CLI tool and Python library for Discord user lookup"
 readme = "README.md"
 license = "MIT"  # ← mudar de { text = "MIT" } para "MIT"
