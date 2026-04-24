@@ -173,8 +173,8 @@ class HTMLFormatter(BaseFormatter):
                     <td><img src="{data.get('avatar_url', '')}" width="50" class="avatar"></td>
                     <td>{banner_html}</td>
                     <td>{data.get('created_at', '')}</td>
-                    <td style="text-align: center;">{data.get('public_flags', 0)}</td>
                     <td>{'Yes' if data.get('is_bot') else 'No'}</td>
+                    <td style="text-align: center;">{data.get('public_flags', 0)}</td>
                     <td></td>
                 </tr>"""
             else:
@@ -303,8 +303,8 @@ class HTMLFormatter(BaseFormatter):
                         <th>Avatar</th>
                         <th>Banner</th>
                         <th>Created At</th>
-                        <th>Public Flags</th>
                         <th>Bot</th>
+                        <th>Public Flags</th>
                         <th>Error</th>
                     </tr>
                 </thead>
