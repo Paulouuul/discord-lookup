@@ -301,7 +301,7 @@ class HTMLFormatter(BaseFormatter):
                         <th>Discriminator</th>
                         <th>Global Name</th>
                         <th>Avatar</th>
-                        <th>Banner URL</th>
+                        <th>Banner</th>
                         <th>Created At</th>
                         <th>Public Flags</th>
                         <th>Bot</th>
