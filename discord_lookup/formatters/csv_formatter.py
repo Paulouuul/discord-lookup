@@ -80,6 +80,7 @@ class CSVFormatter(BaseFormatter):
             "banner_url",
             "created_at",
             "is_bot",
+            "public_flags",
             "error"
         ])
         
@@ -97,6 +98,7 @@ class CSVFormatter(BaseFormatter):
                     data.get('banner_url') or '',
                     data.get('created_at', ''),
                     data.get('is_bot', False),
+                    data.get('public_flags', 0),
                     ""
                 ])
             else:
