@@ -93,7 +93,8 @@ class TestMarkdownFormatter:
                     "global_name": None,
                     "avatar_url": "https://example.com/avatar1.png",
                     "created_at": "01/01/2020 12:00",
-                    "is_bot": False
+                    "is_bot": False,
+                    "public_flags": 128
                 }
             },
             {
@@ -124,8 +125,10 @@ class TestMarkdownFormatter:
                     "discriminator": "0000",
                     "global_name": None,
                     "avatar_url": "https://example.com/avatar1.png",
+                    "banner_url": "https://example.com/banner.png",
                     "created_at": "01/01/2020 12:00",
-                    "is_bot": False
+                    "is_bot": False,
+                    "public_flags": 0
                 }
             }
         ]

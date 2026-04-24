@@ -76,7 +76,8 @@ class TestCSVFormatter:
                     "avatar_url": "https://example.com/avatar1.png",
                     "banner_url": None,
                     "created_at": "01/01/2020 12:00",
-                    "is_bot": False
+                    "is_bot": False,
+                    "public_flags": 0
                 }
             },
             {
@@ -107,7 +108,8 @@ class TestCSVFormatter:
                     "avatar_url": "https://example.com/avatar1.png",
                     "banner_url": None,
                     "created_at": "01/01/2020 12:00",
-                    "is_bot": False
+                    "is_bot": False,
+                    "public_flags": 0
                 }
             }
         ]

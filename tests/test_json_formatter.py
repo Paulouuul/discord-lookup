@@ -36,6 +36,9 @@ class TestJSONFormatter:
         assert data["is_bot"] is False
         assert "avatar_url" in data
         assert data["banner_url"] is None
+        assert "created_at" in data
+        assert "public_flags" in data
+        assert data["public_flags"] == 0
     
     def test_format_user_without_global_name(self):
         """Testa usuário sem global_name"""

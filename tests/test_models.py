@@ -1,5 +1,6 @@
 from discord_lookup.models import DiscordUser
 
+
 def test_discord_user_avatar_url():
     user = DiscordUser(
         id="123", username="teste", discriminator="0000",

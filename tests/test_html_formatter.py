@@ -146,3 +146,80 @@ class TestHTMLFormatter:
         finally:
             if os.path.exists(tmp_path):
                 os.unlink(tmp_path)
+
+    def test_format_batch_has_public_flags(self):
+        """Testa se o batch HTML tem a coluna Public Flags"""
+        results = [
+            {
+                "user_id": "123456789012345678",
+                "success": True,
+                "data": {
+                    "id": "123456789012345678",
+                    "username": "user1",
+                    "discriminator": "0000",
+                    "global_name": "User One",
+                    "avatar_url": "https://example.com/avatar.png",
+                    "banner_url": "https://example.com/banner.png",
+                    "created_at": "01/01/2020 12:00",
+                    "is_bot": False,
+                    "public_flags": 128
+                }
+            }
+        ]
+        
+        result = HTMLFormatter.format_batch(results)
+        
+        assert "Public Flags" in result
+        assert "128" in result
+
+
+    def test_format_batch_has_banner_as_image(self):
+        """Testa se o banner é exibido como imagem no batch"""
+        results = [
+            {
+                "user_id": "123456789012345678",
+                "success": True,
+                "data": {
+                    "id": "123456789012345678",
+                    "username": "user1",
+                    "discriminator": "0000",
+                    "global_name": "User One",
+                    "avatar_url": "https://example.com/avatar.png",
+                    "banner_url": "https://example.com/banner.png",
+                    "created_at": "01/01/2020 12:00",
+                    "is_bot": False,
+                    "public_flags": 0
+                }
+            }
+        ]
+        
+        result = HTMLFormatter.format_batch(results)
+        
+        assert '<img src="https://example.com/banner.png"' in result
+        assert 'class="banner"' in result
+
+
+    def test_format_batch_has_avatar_as_image(self):
+        """Testa se o avatar é exibido como imagem no batch"""
+        results = [
+            {
+                "user_id": "123456789012345678",
+                "success": True,
+                "data": {
+                    "id": "123456789012345678",
+                    "username": "user1",
+                    "discriminator": "0000",
+                    "global_name": "User One",
+                    "avatar_url": "https://example.com/avatar.png",
+                    "banner_url": None,
+                    "created_at": "01/01/2020 12:00",
+                    "is_bot": False,
+                    "public_flags": 0
+                }
+            }
+        ]
+        
+        result = HTMLFormatter.format_batch(results)
+        
+        assert '<img src="https://example.com/avatar.png"' in result
+        assert 'class="avatar"' in result

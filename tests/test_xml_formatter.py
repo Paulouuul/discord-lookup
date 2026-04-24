@@ -32,6 +32,11 @@ class TestXMLFormatter:
         assert "<id>123456789012345678</id>" in result
         assert "<username>testuser</username>" in result
         assert "<discriminator>1234</discriminator>" in result
+        assert "<global_name>Test User</global_name>" in result
+        assert "<avatar_url>" in result
+        assert "<is_bot>false</is_bot>" in result
+        assert "<created_at>" in result
+        assert "<public_flags>0</public_flags>" in result
         assert "</user>" in result
     
     def test_save_xml_to_file(self):

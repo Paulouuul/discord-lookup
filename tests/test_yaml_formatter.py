@@ -35,6 +35,10 @@ class TestYAMLFormatter:
         assert data["global_name"] == "Test User"
         assert data["is_bot"] is False
         assert "avatar_url" in data
+        assert "banner_url" in data
+        assert "created_at" in data
+        assert "public_flags" in data
+        assert data["public_flags"] == 0
     
     def test_format_user_without_global_name(self):
         """Testa usuário sem global_name"""
@@ -96,8 +100,10 @@ class TestYAMLFormatter:
                     "discriminator": "0000",
                     "global_name": None,
                     "avatar_url": "https://example.com/avatar1.png",
+                    "banner_url": "https://example.com/banner.png",
                     "created_at": "01/01/2020 12:00",
-                    "is_bot": False
+                    "is_bot": False,
+                    "public_flags": 128
                 }
             },
             {
@@ -127,8 +133,10 @@ class TestYAMLFormatter:
                     "discriminator": "0000",
                     "global_name": None,
                     "avatar_url": "https://example.com/avatar1.png",
+                    "banner_url": "https://example.com/banner.png",
                     "created_at": "01/01/2020 12:00",
-                    "is_bot": False
+                    "is_bot": False,
+                    "public_flags": 0
                 }
             }
         ]
