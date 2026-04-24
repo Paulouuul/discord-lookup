@@ -128,7 +128,7 @@ class DiscordClient:
             list: Lista de dicionários com resultados (inclui erros)
         """
         results = []
-        iterator = tqdm(user_ids, desc="Buscando usuários") if show_progress else user_ids
+        iterator = tqdm(user_ids, desc="Buscando usuários", disable=not show_progress) if show_progress else user_ids
         
         for user_id in iterator:
             try:

@@ -53,7 +53,7 @@ class GetUsersBatchUseCase:
             # ========== 2. BUSCAR USUÁRIOS NÃO CACHEADOS ==========
             if uncached_ids:
                 # Buscar usando o método batch existente
-                batch_results = self.client.get_users_batch(uncached_ids)
+                batch_results = self.client.get_users_batch(uncached_ids, show_progress=False)
                 
                 for r in batch_results:
                     results.append(r)

@@ -42,14 +42,14 @@ class Exporter:
             Response: FastAPI response com o conteúdo formatado
         """
         if "text/csv" in accept:
-            return Response(content=CSVFormatter.format_batch(batch.dict()["results"]), media_type="text/csv")
+            return Response(content=CSVFormatter.format_batch(batch.model_dump()["results"]), media_type="text/csv")
         elif "application/x-yaml" in accept or "text/yaml" in accept:
-            return Response(content=YAMLFormatter.format_batch(batch.dict()["results"]), media_type="application/x-yaml")
+            return Response(content=YAMLFormatter.format_batch(batch.model_dump()["results"]), media_type="application/x-yaml")
         elif "text/html" in accept:
-            return Response(content=HTMLFormatter.format_batch(batch.dict()["results"]), media_type="text/html")
+            return Response(content=HTMLFormatter.format_batch(batch.model_dump()["results"]), media_type="text/html")
         elif "application/xml" in accept or "text/xml" in accept:
-            return Response(content=XMLFormatter.format_batch(batch.dict()["results"]), media_type="application/xml")
+            return Response(content=XMLFormatter.format_batch(batch.model_dump()["results"]), media_type="application/xml")
         elif "text/markdown" in accept:
-            return Response(content=MarkdownFormatter.format_batch(batch.dict()["results"]), media_type="text/markdown")
+            return Response(content=MarkdownFormatter.format_batch(batch.model_dump()["results"]), media_type="text/markdown")
         else:
-            return Response(content=JSONFormatter.format_batch(batch.dict()["results"]), media_type="application/json")
+            return Response(content=JSONFormatter.format_batch(batch.model_dump()["results"]), media_type="application/json")
