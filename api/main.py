@@ -1,12 +1,16 @@
 """
 Entry point da API FastAPI
 """
-
+import logging
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from api.router import router
 from api.config import settings
 
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+)
 app = FastAPI(
     title=settings.API_TITLE,
     description=settings.API_DESCRIPTION,
@@ -32,7 +36,7 @@ async def root():
         "message": "Discord Lookup API",
         "docs": "/docs",
         "redoc": "/redoc",
-        "health": "/users/health"
+        "health": "/health"
     }
 @app.get("/health")
 async def health_check():

@@ -14,6 +14,11 @@ class Settings:
     # Discord
     DISCORD_BOT_TOKEN: str = os.getenv('DISCORD_BOT_TOKEN', '')
     
+    # Redis
+    REDIS_HOST: str = os.getenv('REDIS_HOST', 'localhost')
+    REDIS_PORT: int = int(os.getenv('REDIS_PORT', '6379'))
+    CACHE_TTL: int = int(os.getenv('CACHE_TTL', '3600'))
+    
     # API
     API_TITLE: str = "Discord Lookup API"
     API_DESCRIPTION: str = "API para consulta de usuários do Discord"

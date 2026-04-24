@@ -6,13 +6,15 @@ from fastapi import HTTPException
 from typing import List
 from discord_lookup import DiscordClient
 from api.models.schemas import BatchResponse, BatchResultItem
+from api.cache import RedisCache
 
 
 class GetUsersBatchUseCase:
     """Use case para buscar múltiplos usuários"""
     
-    def __init__(self, client: DiscordClient):
+    def __init__(self, client: DiscordClient, cache: RedisCache = None):
         self.client = client
+        self.cache = cache
     
     def execute(self, user_ids: List[str]) -> BatchResponse:
         """
@@ -25,8 +27,42 @@ class GetUsersBatchUseCase:
             BatchResponse: Resultados formatados com estatísticas
         """
         try:
-            results = self.client.get_users_batch(user_ids)
+            # results = self.client.get_users_batch(user_ids)
+
+            results = []
+            uncached_ids = []
             
+             # ========== 1. VERIFICAR CACHE POR USUÁRIO ==========
+            if self.cache and self.cache.is_available:
+                for user_id in user_ids:
+                    cache_key = f"user:{user_id}"
+                    cached = self.cache.get(cache_key)
+                    if cached:
+                        # Usuário encontrado no cache
+                        results.append({
+                            "user_id": user_id,
+                            "success": True,
+                            "data": cached
+                        })
+                    else:
+                        uncached_ids.append(user_id)
+            else:
+                uncached_ids = user_ids
+            # ===================================================
+            
+            # ========== 2. BUSCAR USUÁRIOS NÃO CACHEADOS ==========
+            if uncached_ids:
+                # Buscar usando o método batch existente
+                batch_results = self.client.get_users_batch(uncached_ids)
+                
+                for r in batch_results:
+                    results.append(r)
+                    
+                    # Salvar no cache
+                    if self.cache and self.cache.is_available and r['success']:
+                        cache_key = f"user:{r['user_id']}"
+                        self.cache.set(cache_key, r['data'])
+            # ===================================================
             # Converter resultados para o formato esperado
             formatted_results = []
             for r in results:
