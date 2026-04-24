@@ -2,6 +2,6 @@
 Utils package
 """
 
-from api.utils.csv_export import user_to_csv, batch_to_csv
+from api.utils.exporters import Exporter
 
-__all__ = ["user_to_csv", "batch_to_csv"]
+__all__ = ["Exporter"]

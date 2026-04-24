@@ -175,14 +175,13 @@ class HTMLFormatter(BaseFormatter):
                     <td>{data.get('created_at', '')}</td>
                     <td>{'Yes' if data.get('is_bot') else 'No'}</td>
                     <td style="text-align: center;">{data.get('public_flags', 0)}</td>
-                    <td></td>
                 </tr>"""
             else:
                 rows += f"""
                 <tr style="background-color: #ffebee;">
                     <td>{result['user_id']}</td>
                     <td><span class="badge badge-bot">ERROR</span></td>
-                    <td colspan="11">{result.get('error', 'Unknown error')}</td>
+                    <td colspan="10">{result.get('error', 'Unknown error')}</td>
                 </tr>"""
         
         return f"""<!DOCTYPE html>
@@ -305,7 +304,6 @@ class HTMLFormatter(BaseFormatter):
                         <th>Created At</th>
                         <th>Bot</th>
                         <th>Public Flags</th>
-                        <th>Error</th>
                     </tr>
                 </thead>
                 <tbody>

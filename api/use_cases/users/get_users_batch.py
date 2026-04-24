@@ -41,8 +41,10 @@ class GetUsersBatchUseCase:
                             "discriminator": data['discriminator'],
                             "global_name": data.get('global_name'),
                             "avatar_url": data['avatar_url'],
+                            "banner_url": data.get('banner_url'),
                             "created_at": data['created_at'],
-                            "is_bot": data['is_bot']
+                            "is_bot": data['is_bot'],
+                            "public_flags": data.get('public_flags', 0)
                         },
                         error=None
                     ))

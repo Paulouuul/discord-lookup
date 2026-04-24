@@ -26,8 +26,10 @@ class BatchUserData(BaseModel):
     discriminator: str
     global_name: Optional[str] = None
     avatar_url: str
+    banner_url: Optional[str] = None
     created_at: str
     is_bot: bool
+    public_flags: int = 0 
 
 
 class BatchResultItem(BaseModel):
