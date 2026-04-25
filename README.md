@@ -229,8 +229,8 @@ id,username,discriminator,global_name,avatar_url,banner_url,is_bot,created_at,pu
         "global_name": "Nome Um",
         "avatar_url": "https://cdn.discordapp.com/avatars/123456789012345678/avatar_hash.png?size=512",
         "banner_url": null,
-        "created_at": "01/01/2021 12:00",
         "is_bot": false,
+        "created_at": "01/01/2021 12:00",
         "public_flags": 131072
       }
     },
@@ -244,8 +244,8 @@ id,username,discriminator,global_name,avatar_url,banner_url,is_bot,created_at,pu
         "global_name": "Nome Dois",
         "avatar_url": "https://cdn.discordapp.com/avatars/876543210987654321/avatar_hash.png?size=512",
         "banner_url": null,
-        "created_at": "15/03/2022 18:30",
         "is_bot": false,
+        "created_at": "15/03/2022 18:30",
         "public_flags": 0
       }
     }
@@ -256,8 +256,9 @@ id,username,discriminator,global_name,avatar_url,banner_url,is_bot,created_at,pu
 ### Batch Output (CSV)
 
 ```csv
-user_id,success,username,discriminator,global_name,avatar_url,banner_url,created_at,is_bot,public_flags,error
-123456789012345678,SUCCESS,usuario1,1234,Nome Um,https://cdn.discordapp.com/avatars/123456789012345678/avatar_hash.png?size=512,,01/01/2021 12:00,False,131072,
+user_id,success,username,discriminator,global_name,avatar_url,banner_url,is_bot,created_at,public_flags,error
+123456789012345678,SUCCESS,usuario1,1234,Nome Um,https://cdn.discordapp.com/avatars/123456789012345678/avatar_hash.png?size=512,,False,01/01/2021 12:00,131072,
+876543210987654321,SUCCESS,usuario2,5678,Nome Dois,https://cdn.discordapp.com/avatars/876543210987654321/avatar_hash.png?size=512,,False,15/03/2022 18:30,0,
 ```
 ## Help
 ```bash
