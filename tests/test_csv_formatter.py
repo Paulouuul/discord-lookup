@@ -75,8 +75,8 @@ class TestCSVFormatter:
                     "global_name": None,
                     "avatar_url": "https://example.com/avatar1.png",
                     "banner_url": None,
-                    "created_at": "01/01/2020 12:00",
                     "is_bot": False,
+                    "created_at": "01/01/2020 12:00",
                     "public_flags": 0
                 }
             },
@@ -89,7 +89,7 @@ class TestCSVFormatter:
         
         result = CSVFormatter.format_batch(results)
         
-        assert "user_id,success,username,discriminator,global_name,avatar_url,banner_url,created_at,is_bot,public_flags,error" in result
+        assert "user_id,success,username,discriminator,global_name,avatar_url,banner_url,is_bot,created_at,public_flags,error" in result
         assert "123456789012345678,SUCCESS,user1" in result
         assert "876543210987654321,ERROR" in result
         assert "Usuário não encontrado" in result
