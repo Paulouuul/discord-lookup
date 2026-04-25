@@ -78,8 +78,8 @@ class CSVFormatter(BaseFormatter):
             "global_name",
             "avatar_url",
             "banner_url",
-            "created_at",
             "is_bot",
+            "created_at",
             "public_flags",
             "error"
         ])
@@ -96,8 +96,8 @@ class CSVFormatter(BaseFormatter):
                     data.get('global_name') or '',
                     data.get('avatar_url', ''),
                     data.get('banner_url') or '',
-                    data.get('created_at', ''),
                     data.get('is_bot', False),
+                    data.get('created_at', ''),
                     data.get('public_flags', 0),
                     ""
                 ])

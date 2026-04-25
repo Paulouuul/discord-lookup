@@ -46,13 +46,13 @@ def format_user_output(user, show_colors=True):
         logger.info(f"{Fore.CYAN}Discriminator:{Style.RESET_ALL} #{user.discriminator}")
         logger.info(f"{Fore.CYAN}Nome Completo:{Style.RESET_ALL} {user.username}#{user.discriminator}")
         logger.info(f"{Fore.CYAN}Avatar:{Style.RESET_ALL} {user.avatar_url}")
+        if user.banner:
+            logger.info(f"{Fore.CYAN}Banner:{Style.RESET_ALL} {user.banner_url}")
         logger.info(f"{Fore.CYAN}Bot:{Style.RESET_ALL} {'Sim' if user.is_bot else 'Não'}")
         logger.info(f"{Fore.CYAN}Data Criação:{Style.RESET_ALL} {user.created_at}")
         logger.info(f"{Fore.CYAN}Badges/Flags:{Style.RESET_ALL} {user.public_flags}")
         logger.info(f"{Fore.CYAN}Global Name:{Style.RESET_ALL} {user.global_name or 'N/A'}")
-        
-        if user.banner:
-            logger.info(f"{Fore.CYAN}Banner:{Style.RESET_ALL} {user.banner_url}")
+
     else:
         logger.info(f"USUÁRIO ENCONTRADO!")
         logger.info(f"ID: {user.id}")
@@ -60,13 +60,13 @@ def format_user_output(user, show_colors=True):
         logger.info(f"Discriminator: #{user.discriminator}")
         logger.info(f"Nome Completo: {user.username}#{user.discriminator}")
         logger.info(f"Avatar: {user.avatar_url}")
+        if user.banner:
+            logger.info(f"Banner: {user.banner_url}")
         logger.info(f"Bot: {'Sim' if user.is_bot else 'Não'}")
         logger.info(f"Data Criação: {user.created_at}")
         logger.info(f"Badges/Flags: {user.public_flags}")
         logger.info(f"Global Name: {user.global_name or 'N/A'}")
         
-        if user.banner:
-            logger.info(f"Banner: {user.banner_url}")
 
 
 def main():
