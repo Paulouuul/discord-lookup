@@ -345,7 +345,6 @@ discord-lookup/
 │       └── markdown_formatter.py      # Markdown output with table (11 columns)
 ├── tests/                             # Unit tests (58 tests)
 │   ├── __init__.py
-│   ├── test_api.py                    # API endpoint tests
 │   ├── test_cache.py                  # Redis cache tests
 │   ├── test_client.py                 # DiscordClient tests
 │   ├── test_csv_formatter.py          # CSVFormatter tests
