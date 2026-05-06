@@ -344,7 +344,7 @@ discord-lookup/
 │       ├── html_formatter.py          # HTML output with table and images
 │       ├── xml_formatter.py           # XML output using dicttoxml
 │       └── markdown_formatter.py      # Markdown output with table (11 columns)
-├── tests/                             # Unit tests (58 tests)
+├── tests/                             # Unit tests
 │   ├── __init__.py
 │   ├── test_cache.py                  # Redis cache tests
 │   ├── test_client.py                 # DiscordClient tests
