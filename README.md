@@ -381,7 +381,7 @@ pytest tests/test_formatters.py -v
 
 ## License
 
-This project is licensed under the MIT License - See [LICENSE](LICENSE) for full text.
+This project is licensed under the MIT License - see [LICENSE](LICENSE) for full text.
 
 ## Author
 
