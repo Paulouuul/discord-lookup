@@ -59,12 +59,13 @@ The workflow automates the process of querying Discord users, storing results, a
 
 🔍 Consulta ao Discord API
 ```text
-• Usuário: enrico3509 (Enrico)
-• ID: `561973026711797792`
+• Usuário: exemplo_usuario
+• ID: `123456789012345678`
 • Status: 👤 Usuário Normal
-• Criado em: 31/03/2019 18:00
+• Criado em: 01/01/2021 12:00
 • Consulta em: 2026-05-07T04:31:39.160Z
 ```
+
 ## Import and Configure
 
 ### 1. Import Workflow
