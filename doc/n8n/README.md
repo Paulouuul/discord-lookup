@@ -139,7 +139,6 @@ doc/n8n/discord-lookup-workflow.json
 ## Limitations
 - Single user lookup only (batch processing not supported in this workflow)
 - Requires Discord Lookup API to be running on `http://discord-lookup-api:8000`
-- Webhook URL assumes n8n is accessible at `http://localhost:5678`
 
 ## Troubleshooting
 
