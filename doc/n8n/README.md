@@ -62,7 +62,7 @@ The workflow automates the process of querying Discord users, storing results, a
 • Usuário: exemplo_usuario
 • ID: `123456789012345678`
 • Status: 👤 Usuário Normal
-• Criado em: 01/01/2021 12:00
+• Criado em: 01/01/2019 12:00
 • Consulta em: 2026-05-07T04:31:39.160Z
 ```
 
