@@ -169,6 +169,17 @@ docker exec discord-lookup-redis-1 redis-cli FLUSHALL
 ```bash
 docker exec discord-lookup-redis-1 redis-cli DBSIZE
 ```
+## n8n Automation
+
+This project includes a complete n8n automation workflow that integrates the Discord Lookup API with Google Sheets and Slack.
+
+The workflow:
+- Receives `user_id` via webhook
+- Queries the Discord Lookup API
+- Stores results in Google Sheets
+- Sends formatted alerts to Slack
+
+📁 **Full documentation**: [doc/n8n/README.md](doc/n8n/README.md)
 
 ## Output Examples
 
