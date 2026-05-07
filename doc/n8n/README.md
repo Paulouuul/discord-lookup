@@ -91,12 +91,12 @@ http://localhost:5678
 # Test webhook (development)
 curl -X POST http://localhost:5678/webhook-test/discord-lookup \
   -H "Content-Type: application/json" \
-  -d '{"user_id": "561973026711797792"}'
+  -d '{"user_id": "123456789012345678"}'
 
 # Production webhook (after activating workflow)
 curl -X POST http://localhost:5678/webhook/discord-lookup \
   -H "Content-Type: application/json" \
-  -d '{"user_id": "561973026711797792"}'
+  -d '{"user_id": "123456789012345678"}'
 ```
 
 ## Testing the Workflow
@@ -109,7 +109,7 @@ docker-compose -f docker-compose.n8n.yml up -d
 # 3. Test with real user ID
 curl -X POST http://localhost:5678/webhook-test/discord-lookup \
   -H "Content-Type: application/json" \
-  -d '{"user_id": "561973026711797792"}'
+  -d '{"user_id": "123456789012345678"}'
 
 # 4. Check Google Sheets for new row
 
