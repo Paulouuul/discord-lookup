@@ -355,6 +355,13 @@ discord-lookup/
 │       ├── html_formatter.py          # HTML output with table and images
 │       ├── xml_formatter.py           # XML output using dicttoxml
 │       └── markdown_formatter.py      # Markdown output with table (11 columns)
+│── doc/                               # Main CLI package
+│   ├── images/                        # Screenshots
+│   │   └── n8n/                       # n8n workflow screenshots
+│           └── workflow-overview.png  # Complete workflow visualization
+│   └── n8n/                           # n8n workflow documentation
+│       ├── README.md                  # Complete n8n workflow guide
+│       └── discord-lookup-workflow.json # n8n workflow export
 ├── tests/                             # Unit tests
 │   ├── __init__.py
 │   ├── test_cache.py                  # Redis cache tests
@@ -370,6 +377,7 @@ discord-lookup/
 ├── Dockerfile.cli                     # Docker image for CLI (python:3.11-slim)
 ├── Dockerfile.api                     # Docker image for API (python:3.11-slim + uvicorn)
 ├── docker-compose.api.yml             # Docker Compose (API + Redis services)
+├── docker-compose.n8n.yml             # Docker Compose (N8N Service)
 ├── requirements.txt                   # Python dependencies
 └── README.md                          # Project documentation
 ```
