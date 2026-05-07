@@ -30,6 +30,9 @@ Discord Lookup Tool is a command-line interface (CLI) application and Python lib
 - GitHub Actions for CI/CD
 - FastAPI for REST API
 - Redis for caching
+- n8n for workflow automation
+- Google Sheets API
+- Slack API
 
 ## Installation
 
