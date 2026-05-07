@@ -30,6 +30,8 @@ dist/
 
 # Output files
 *.json
+!doc/n8n/*.json
+!*.workflow.json
 *.csv
 *.html
 *.yaml

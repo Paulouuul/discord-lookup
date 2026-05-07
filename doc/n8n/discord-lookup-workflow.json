@@ -1,0 +1,278 @@
+{
+  "name": "Discord API Lookup - Google Sheets Logger + Slack Alerts",
+  "nodes": [
+    {
+      "parameters": {
+        "url": "=http://discord-lookup-api:8000/users/{{$json.body.user_id}}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Accept",
+              "value": "application/json"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        176,
+        16
+      ],
+      "id": "85efc8b3-71e1-4716-90c5-7e9beeb0bf53",
+      "name": "call-discord-lookup-single-user-api"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Pega os dados do nó anterior (HTTP Request)\nconst data = $input.first().json;\n\n// Extrai e processa os dados\nconst userData = {\n  user_id: data.id,\n  username: data.username,\n  global_name: data.global_name || 'N/A',\n  is_bot: data.is_bot,\n  created_at: data.created_at,\n  public_flags: data.public_flags,\n  avatar_url: data.avatar_url,\n  search_timestamp: new Date().toISOString(),\n  status: data.is_bot ? \"BOT DETECTED\" : \"NORMAL USER\"\n};\n\n// Retorna os dados processados\nreturn [{ json: userData }];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        464,
+        16
+      ],
+      "id": "569fceb7-1053-4584-9810-197a33627429",
+      "name": "process-user-data"
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "1Z5I93qzOgF2XHGoxskAEXfkFrhpkuCKS_IeQDykWdOM",
+          "mode": "list",
+          "cachedResultName": "discord-lookup-n8n",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1Z5I93qzOgF2XHGoxskAEXfkFrhpkuCKS_IeQDykWdOM/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "users",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1Z5I93qzOgF2XHGoxskAEXfkFrhpkuCKS_IeQDykWdOM/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "autoMapInputData",
+          "value": {},
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "user_id",
+              "displayName": "user_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "username",
+              "displayName": "username",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "global_name",
+              "displayName": "global_name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "is_bot",
+              "displayName": "is_bot",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "created_at",
+              "displayName": "created_at",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "public_flags",
+              "displayName": "public_flags",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "avatar_url",
+              "displayName": "avatar_url",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "search_timestamp",
+              "displayName": "search_timestamp",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "status",
+              "displayName": "status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        784,
+        16
+      ],
+      "id": "ea0d4554-cfdf-481c-b0a7-182bbddfc56a",
+      "name": "save-user-data-on-google-sheets",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "bLA77xO0nrzxhzI4",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "authentication": "oAuth2",
+        "select": "channel",
+        "channelId": {
+          "__rl": true,
+          "value": "C0B29HFFLBW",
+          "mode": "list",
+          "cachedResultName": "discord-alerts"
+        },
+        "text": "={{$json.is_bot === true ? \"🚨 *ALERTA: BOT DETECTADO!* 🚨\" : \"✅ *Consulta de Usuário*\"}}\n\n• *Usuário:* {{$json.username}}\n• *Nome global:* {{$json.global_name}}\n• *ID:* `{{$json.user_id}}`\n• *Status:* {{$json.status}}\n• *Criado em:* {{$json.created_at}}\n• *Consultado em:* {{$json.search_timestamp}}",
+        "otherOptions": {}
+      },
+      "type": "n8n-nodes-base.slack",
+      "typeVersion": 2.4,
+      "position": [
+        992,
+        16
+      ],
+      "id": "6f239a20-3a81-482e-b665-81449fc1af6b",
+      "name": "send-slack-notification",
+      "webhookId": "aaf07567-955e-4cb9-b42f-0598c0f77149",
+      "credentials": {
+        "slackOAuth2Api": {
+          "id": "wDDI0fwfzgIAegc1",
+          "name": "Slack account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "discord-lookup",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        -144,
+        16
+      ],
+      "id": "b3778a9d-24d0-49b0-88cb-27a67ea7c22a",
+      "name": "discord-lookup-webhook",
+      "webhookId": "62848496-0239-4fc7-8de9-fee3bf63ce3c"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "call-discord-lookup-single-user-api": {
+      "main": [
+        [
+          {
+            "node": "process-user-data",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "process-user-data": {
+      "main": [
+        [
+          {
+            "node": "save-user-data-on-google-sheets",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "save-user-data-on-google-sheets": {
+      "main": [
+        [
+          {
+            "node": "send-slack-notification",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "discord-lookup-webhook": {
+      "main": [
+        [
+          {
+            "node": "call-discord-lookup-single-user-api",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "96be0d3f-83cb-47bf-8221-091f5fb0337d",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "8bf523fc8d56ed68e6d8e92eee9a387714201620c79c48a04106ade0cfcb85ba"
+  },
+  "id": "5psWjOM5OQNsb3SW",
+  "tags": []
+}
