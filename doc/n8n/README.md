@@ -3,7 +3,7 @@
 [![n8n](https://img.shields.io/badge/n8n-v2.19.4+-orange)](https://n8n.io/)
 [![Slack](https://img.shields.io/badge/slack-webhook-blue)](https://slack.com/)
 [![Google Sheets](https://img.shields.io/badge/google-sheets-green)](https://sheets.google.com/)
-[![License](https://img.shields.io/badge/license-MIT-green)](../LICENSE)
+[![License](https://img.shields.io/badge/license-MIT-green)](../../LICENSE)
 
 ## Prerequisites
 
