@@ -358,7 +358,7 @@ discord-lookup/
 │── doc/                               # Main CLI package
 │   ├── images/                        # Screenshots
 │   │   └── n8n/                       # n8n workflow screenshots
-│           └── workflow-overview.png  # Complete workflow visualization
+│   │       └── workflow-overview.png  # Complete workflow visualization
 │   └── n8n/                           # n8n workflow documentation
 │       ├── README.md                  # Complete n8n workflow guide
 │       └── discord-lookup-workflow.json # n8n workflow export
