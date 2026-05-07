@@ -82,13 +82,12 @@ http://localhost:5678
 ### 3. Set Up Webhook
 
 ```bash
-## Test webhook (development)
+# Test webhook (development)
 curl -X POST http://localhost:5678/webhook-test/discord-lookup \
   -H "Content-Type: application/json" \
   -d '{"user_id": "561973026711797792"}'
 
-## Production webhook (after activating workflow)
-
+# Production webhook (after activating workflow)
 curl -X POST http://localhost:5678/webhook/discord-lookup \
   -H "Content-Type: application/json" \
   -d '{"user_id": "561973026711797792"}'
@@ -107,6 +106,7 @@ curl -X POST http://localhost:5678/webhook-test/discord-lookup \
   -d '{"user_id": "561973026711797792"}'
 
 # 4. Check Google Sheets for new row
+
 # 5. Verify Slack channel for notification
 ```
 
