@@ -50,6 +50,11 @@ The workflow automates the process of querying Discord users, storing results, a
 | `Save to Google Sheets` | Stores user data in spreadsheet |
 | `Send Slack Alert` | Sends notification to #discord-alerts |
 
+## Screenshots
+
+### Workflow in n8n
+![Discord Lookup Workflow](../images/n8n/workflow-overview.png)
+
 ## Output Example in Slack
 
 🔍 Consulta ao Discord API
