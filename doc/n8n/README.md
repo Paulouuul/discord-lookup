@@ -109,6 +109,7 @@ curl -X POST http://localhost:5678/webhook-test/discord-lookup \
 # 4. Check Google Sheets for new row
 # 5. Verify Slack channel for notification
 ```
+
 ### Workflow Version
 
 | Property | Value |
