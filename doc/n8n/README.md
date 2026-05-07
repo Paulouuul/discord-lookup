@@ -62,20 +62,25 @@ The workflow automates the process of querying Discord users, storing results, a
 ```
 ## Import and Configure
 
-1. Import Workflow
+### 1. Import Workflow
+
 ```bash
 # Access n8n UI
 http://localhost:5678
 # Workflows → Import from File
 # Select: doc/n8n/discord-lookup-workflow.json
 ```
-2. Configure Credentials
+
+### 2. Configure Credentials
+
 | Service | Configuration |
 |---------|---------------|
 | **Google Sheets** | OAuth2 with `https://www.googleapis.com/auth/spreadsheets` scope |
 | **Slack** | OAuth2 with `chat:write` scope |
 | **Discord API** | Base URL: `http://discord-lookup-api:8000` |
-3. Set Up Webhook
+
+### 3. Set Up Webhook
+
 ```bash
 ## Test webhook (development)
 curl -X POST http://localhost:5678/webhook-test/discord-lookup \
