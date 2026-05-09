@@ -184,7 +184,7 @@ The workflow:
 - Stores results in Google Sheets
 - Sends formatted alerts to Slack
 
-📁 **Full documentation**: [doc/n8n/README.md](n8n/doc/README.md)
+📁 **Full documentation**: [n8n/doc/README.md](n8n/doc/README.md)
 
 ## Output Examples
 
