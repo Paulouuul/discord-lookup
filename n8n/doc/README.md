@@ -53,7 +53,7 @@ The workflow automates the process of querying Discord users, storing results, a
 ## Screenshots
 
 ### Workflow in n8n
-![Discord Lookup Workflow](../images/n8n/workflow-overview.png)
+![Discord Lookup Workflow](/images/workflow-overview.png)
 
 ## Output Example in Slack
 
@@ -126,7 +126,7 @@ curl -X POST http://localhost:5678/webhook-test/discord-lookup \
 | **Author** | Paulo Ricardo Tebet Lyrio |
 
 ## File Location
-doc/n8n/discord-lookup-workflow.json
+/n8n/workflow/discord-lookup-workflow.json
 
 ## Environment Variables
 
@@ -154,7 +154,7 @@ To modify this workflow:
 1. Import the JSON file into n8n
 2. Make your changes
 3. Export as new JSON
-4. Update documentation
+4. Update workflow
 
 ## Related Documentation
 

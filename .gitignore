@@ -30,7 +30,7 @@ dist/
 
 # Output files
 *.json
-!doc/n8n/*.json
+!/n8n/workflow/*.json
 !*.workflow.json
 *.csv
 *.html
